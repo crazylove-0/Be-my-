@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>To The One Who Has My Heart... 🌹</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #3d031b 0%, #1f010e 55%, #080004 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #petalsCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .viewport {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 420px;
+      height: 96vh;
+      max-height: 860px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      contain: layout paint;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.98) translateZ(0);
+      transition: opacity 0.22s ease-out, transform 0.22s ease-out;
+      will-change: opacity, transform;
+    }
+    .screen.active {
+      display: flex;
+      opacity: 1;
+      transform: scale(1) translateZ(0);
+    }
+
+    h1.hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: #f7e6c4;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      text-shadow: 0 0 15px rgba(255, 182, 193, 0.4);
+    }
+    p.hero-subtitle {
+      font-size: 12.5px;
+      color: #e5b6c8;
+      margin-bottom: 14px;
+      font-weight: 300;
+    }
+
+    .btn-luxury {
+      background: linear-gradient(135deg, rgba(60, 5, 25, 0.85), rgba(25, 1, 10, 0.95));
+      border: 1.5px solid #d4af37;
+      color: #f7e6c4;
+      padding: 11px 30px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(212, 175, 55, 0.25);
+      transition: transform 0.12s ease, border-color 0.12s ease;
+      margin-top: 14px;
+    }
+    .btn-luxury:active {
+      transform: scale(0.94);
+      border-color: #ffd700;
+    }
+
+    /* SCREEN 1: Velvet Rose Vault Entrance */
+    .rose-portal-container {
+      position: relative;
+      width: 210px;
+      height: 210px;
+      margin: 10px auto 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glow-aura {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(230, 0, 76, 0.35) 0%, transparent 75%);
+      animation: auraPulse 3s infinite alternate ease-in-out;
+    }
+    @keyframes auraPulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.15); opacity: 1; }
+    }
+    .velvet-orb {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255, 51, 102, 0.25), rgba(40, 2, 16, 0.8));
+      border: 2px solid rgba(247, 230, 196, 0.5);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(230, 0, 76, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    .velvet-orb:active { transform: scale(0.94); }
+    .blooming-rose {
+      font-size: 64px;
+      filter: drop-shadow(0 0 18px rgba(255, 26, 90, 0.8));
+      animation: roseBreath 2s ease-in-out infinite alternate;
+    }
+    @keyframes roseBreath {
+      0% { transform: scale(0.95); }
+      100% { transform: scale(1.1); }
+    }
+
+    /* SCREEN 2: Constellation Star Map */
+    .sky-map-wrapper {
+      position: relative;
+      width: 300px;
+      height: 280px;
+      background: rgba(10, 0, 6, 0.5);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 20px;
+      margin: 8px auto;
+      overflow: hidden;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+    #constellationSvg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .star-node {
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .star-node:hover, .star-node.active {
+      transform: scale(1.35);
+    }
+
+    /* SCREEN 3: Vintage Lo-Fi Cassette Tape */
+    .cassette-box {
+      position: relative;
+      width: 290px;
+      height: 180px;
+      background: linear-gradient(135deg, #1f020c, #0a0004);
+      border: 2px solid #d4af37;
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(212, 175, 55, 0.2);
+      padding: 12px;
+      margin: 10px auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cassette-label {
+      background: #fdf5e6;
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: #3d0213;
+      font-family: 'Dancing Script', cursive;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      border-bottom: 2px solid #c9933b;
+    }
+    .cassette-spools {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: rgba(0,0,0,0.6);
+      border-radius: 12px;
+      padding: 10px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .spool-gear {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 3px dashed #d4af37;
+      animation: spoolRotate 4s linear infinite paused;
+    }
+    .spool-gear.running { animation-play-state: running; }
+    @keyframes spoolRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* SCREEN 4: Wax-Sealed Envelopes */
+    .envelopes-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 310px;
+      margin: 8px auto;
+    }
+    .luxury-envelope {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: transform 0.12s ease, background-color 0.12s;
+    }
+    .luxury-envelope:active { transform: scale(0.97); }
+    .wax-seal {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #e6004c, #800020);
+      border: 1px solid #ffd700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+    .envelope-note-content {
+      display: none;
+      font-size: 11.5px;
+      color: #ffd1dc;
+      text-align: left;
+      line-height: 1.45;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* SCREEN 5: Impossible Proposal Screen */
+    .proposal-arena {
+      position: relative;
+      width: 310px;
+      height: 220px;
+      margin: 10px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-yes {
+      background: linear-gradient(135deg, #ff0055, #990033);
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      padding: 14px 40px;
+      border-radius: 35px;
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(255, 0, 85, 0.8);
+      transition: transform 0.15s ease;
+      z-index: 5;
+    }
+    .btn-yes:active { transform: scale(1.08); }
+    .btn-no {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ccc;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: top 0.2s ease, left 0.2s ease;
+      bottom: 15px;
+      z-index: 6;
+    }
+
+    /* SCREEN 6: Digital Signature Love Contract */
+    .certificate-card {
+      width: 315px;
+      background: #fdf5e6;
+      border: 3px double #b38b4d;
+      border-radius: 16px;
+      padding: 16px 14px;
+      color: #2b0210;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+      margin: 6px auto;
+      text-align: left;
+    }
+    .cert-clause {
+      font-size: 11px;
+      line-height: 1.45;
+      color: #4a1224;
+      margin-bottom: 6px;
+    }
+    #signaturePad {
+      width: 100%;
+      height: 90px;
+      background: #ffffff;
+      border: 1px dashed #b38b4d;
+      border-radius: 10px;
+      margin: 8px 0 4px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .floating-music {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(20, 16, 38, 0.9);
+      border: 1px solid #d4af37;
+      color: #f7e6c4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      z-index: 100;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Music Element -->
+  <audio id="bgSong" loop preload="auto" playsinline>
+    <source src="Dooron Dooron Unplugged Paresh Pahuja 320 Kbps-[AudioTrimmer.com].mp3" type="audio/mpeg">
+    <source src="Dooron%20Dooron%20Unplugged%20Paresh%20Pahuja%20320%20Kbps-[AudioTrimmer.com].mp3" type="audio/mpeg">
+  </audio>
+
+  <canvas id="petalsCanvas"></canvas>
+  <div class="floating-music" id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+  <div class="viewport">
+
+    <!-- SCREEN 1: Velvet Rose Portal -->
+    <div class="screen active" id="screen-portal">
+      <h1 class="hero-title">A Velvet Valentine 🌹</h1>
+      <p class="hero-subtitle">Dedicated exclusively to the queen of my heart</p>
+
+      <div class="rose-portal-container" onclick="openRoseVault()">
+        <div class="glow-aura"></div>
+        <div class="velvet-orb">
+          <div class="blooming-rose">🌹</div>
+        </div>
+      </div>
+
+      <p style="font-size: 12.5px; color: #d4af37; font-weight: 500;">Tap the blooming rose to unlock ✨</p>
+    </div>
+
+    <!-- SCREEN 2: Constellation Star Map -->
+    <div class="screen" id="screen-constellation">
+      <h1 class="hero-title">Our Celestial Orbit ✨</h1>
+      <p class="hero-subtitle">Tap all 4 stars to connect our constellation</p>
+
+      <div class="sky-map-wrapper">
+        <svg id="constellationSvg">
+          <line id="line1" x1="60" y1="140" x2="150" y2="70" stroke="#d4af37" stroke-width="2" stroke-dasharray="150" stroke-dashoffset="150" style="transition: stroke-dashoffset 0.6s ease;"/>
+          <line id="line2" x1="150" y1="70" x2="240" y2="140" stroke="#d4af37" stroke-width="2" stroke-dasharray="150" stroke-dashoffset="150" style="transition: stroke-dashoffset 0.6s ease;"/>
+          <line id="line3" x1="240" y1="140" x2="150" y2="230" stroke="#d4af37" stroke-width="2" stroke-dasharray="150" stroke-dashoffset="150" style="transition: stroke-dashoffset 0.6s ease;"/>
+          <line id="line4" x1="150" y1="230" x2="60" y2="140" stroke="#d4af37" stroke-width="2" stroke-dasharray="150" stroke-dashoffset="150" style="transition: stroke-dashoffset 0.6s ease;"/>
+
+          <circle class="star-node" id="star1" cx="60" cy="140" r="8" fill="#ffd700" onclick="tapConstellationStar(1)"/>
+          <circle class="star-node" id="star2" cx="150" cy="70" r="8" fill="#ffd700" onclick="tapConstellationStar(2)"/>
+          <circle class="star-node" id="star3" cx="240" cy="140" r="8" fill="#ffd700" onclick="tapConstellationStar(3)"/>
+          <circle class="star-node" id="star4" cx="150" cy="230" r="8" fill="#ffd700" onclick="tapConstellationStar(4)"/>
+        </svg>
+      </div>
+
+      <p id="starHintText" style="min-height: 24px; color: #ffd1dc; font-size: 12px;">Start with Star #1 🌟</p>
+      <button class="btn-luxury" id="btnConstNext" style="display:none;" onclick="goToScreen('screen-cassette')">Play Our Tape 📼</button>
+    </div>
+
+    <!-- SCREEN 3: 90s Aesthetic Cassette Player -->
+    <div class="screen" id="screen-cassette">
+      <h1 class="hero-title">Side A: Unspoken Words 📼</h1>
+      <p class="hero-subtitle">The melodies that always bring your face to mind</p>
+
+      <div class="cassette-box">
+        <div class="cassette-label">Harsh & His Favourite Human 💕</div>
+        <div class="cassette-spools">
+          <div class="spool-gear" id="spoolL"></div>
+          <div style="font-size: 18px; color: #d4af37;">❤️</div>
+          <div class="spool-gear" id="spoolR"></div>
+        </div>
+        <p style="font-size: 11px; color: #e5b6c8;">Track: "Dooron Dooron Unplugged" • HQ 320Kbps</p>
+      </div>
+
+      <button class="btn-luxury" onclick="playOrPauseTape()">Play / Pause Melody 🎶</button>
+      <button class="btn-luxury" onclick="goToScreen('screen-envelopes')">Secret Wax Letters 💌</button>
+    </div>
+
+    <!-- SCREEN 4: Wax-Sealed Letters -->
+    <div class="screen" id="screen-envelopes">
+      <h1 class="hero-title">Wax Sealed Secrets 💌</h1>
+      <p class="hero-subtitle">Break each seal to uncover what makes you my home</p>
+
+      <div class="envelopes-zone">
+        <div class="luxury-envelope" onclick="breakSeal(this)">
+          <div>
+            <h4 style="font-size: 13px; color: #fff;">Letter I: The Comfort in Chaos</h4>
+            <p class="envelope-note-content">"Duniya chahe kitni bhi shor aur tension se bhari ho, jab tum bolti ho na... sab theek lagne lagta hai."</p>
+          </div>
+          <div class="wax-seal">👑</div>
+        </div>
+
+        <div class="luxury-envelope" onclick="breakSeal(this)">
+          <div>
+            <h4 style="font-size: 13px; color: #fff;">Letter II: That Pure Laugh</h4>
+            <p class="envelope-note-content">"Jab tum bina soche khulkar hasti ho, sach bataun toh wahi lamha freeze karne ka mann karta hai."</p>
+          </div>
+          <div class="wax-seal">💖</div>
+        </div>
+
+        <div class="luxury-envelope" onclick="breakSeal(this)">
+          <div>
+            <h4 style="font-size: 13px; color: #fff;">Letter III: The Silent Blessing</h4>
+            <p class="envelope-note-content">"Tumhe meri zindagi me lana, meri ab tak ki maangi gayi sabse khoobsurat dua ka asar hai."</p>
+          </div>
+          <div class="wax-seal">✨</div>
+        </div>
+      </div>
+
+      <button class="btn-luxury" id="btnEnvelopesNext" style="display:none;" onclick="goToScreen('screen-proposal')">A Question For You 💍</button>
+    </div>
+
+    <!-- SCREEN 5: Impossible Valentine Proposal -->
+    <div class="screen" id="screen-proposal">
+      <h1 class="hero-title" style="font-size: 24px;">Will You Be My Valentine? 💍🌹</h1>
+      <p class="hero-subtitle">Choose wisely... there is genuinely no other way out ❤️</p>
+
+      <div class="proposal-arena" id="proposalArena">
+        <button class="btn-yes" onclick="acceptProposal()">YES! Forever ❤️</button>
+        <button class="btn-no" id="btnNoTeleport" onmouseover="dodgeNoButton()" onclick="dodgeNoButton()">No 🥺</button>
+      </div>
+
+      <p id="noTauntText" style="min-height: 22px; font-size: 12px; color: #ffd166;"></p>
+    </div>
+
+    <!-- SCREEN 6: Love Contract & Digital Signature -->
+    <div class="screen" id="screen-contract">
+      <h1 class="hero-title">The Forever Covenant 📜</h1>
+      <p class="hero-subtitle">Official Valentine's Agreement</p>
+
+      <div class="certificate-card">
+        <h3 style="font-family: 'Cinzel', serif; font-size: 14px; text-align: center; border-bottom: 1px solid #b38b4d; padding-bottom: 4px; margin-bottom: 8px;">
+          TERMS OF UNCONDITIONAL LOVE
+        </h3>
+        <p class="cert-clause">• <b>Clause 1:</b> Late night drives par ice cream share karna legal obligation rahega.</p>
+        <p class="cert-clause">• <b>Clause 2:</b> Chahe kitna bhi gussa ho, bina baat kiye ya bina 'Goodnight' kahe sona strictly prohibited hai.</p>
+        <p class="cert-clause">• <b>Clause 3:</b> Harsh is permanently entitled to infinite warm hugs whenever required.</p>
+
+        <p style="font-size: 10.5px; margin-top: 8px; font-weight: 600;">Sign with your finger below:</p>
+        <canvas id="signaturePad"></canvas>
+        <button onclick="clearSignature()" style="background:none; border:none; color:#990033; font-size:10px; cursor:pointer; text-decoration:underline;">Clear & Sign Again</button>
+      </div>
+
+      <button class="btn-luxury" onclick="lockContractForever()">Seal The Promise 🔐</button>
+    </div>
+
+    <!-- SCREEN 7: Final Romantic Climax -->
+    <div class="screen" id="screen-final">
+      <div style="font-size: 54px; margin-bottom: 8px;">👑❤️</div>
+      <h1 class="hero-title" style="font-size: 24px;">Bound Forever By Heart</h1>
+      <p class="hero-subtitle" style="max-width: 320px; margin: 10px auto 20px; line-height: 1.6; color: #ffd1dc;">
+        You didn't just become my Valentine, you became my peace, my favourite thought, and my home.<br><br>
+        <b>Happy Valentine's Day, Meri Jaan.</b>
+      </p>
+      <button class="btn-luxury" onclick="location.reload()">Relive Every Moment 🔄</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Universal Haptic Touch Engine
+    function triggerHaptic(len = 25) {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(len); } catch(e) {}
+      }
+    }
+
+    // Audio Engine
+    const bgSong = document.getElementById("bgSong");
+    let audioStarted = false;
+
+    function forceAudioUnlock() {
+      triggerHaptic(20);
+      if (!audioStarted && bgSong) {
+        bgSong.play().then(() => {
+          audioStarted = true;
+          document.getElementById("musicBtn").innerText = "🎵";
+          const sL = document.getElementById("spoolL");
+          const sR = document.getElementById("spoolR");
+          if(sL && sR) { sL.classList.add("running"); sR.classList.add("running"); }
+        }).catch(() => {});
+      }
+    }
+
+    window.addEventListener("pointerdown", forceAudioUnlock, { once: false, passive: true });
+    window.addEventListener("load", forceAudioUnlock, { once: true });
+
+    function toggleMusic() {
+      triggerHaptic(30);
+      if (!bgSong) return;
+      if (bgSong.paused) {
+        bgSong.play();
+        document.getElementById("musicBtn").innerText = "🎵";
+        document.getElementById("spoolL").classList.add("running");
+        document.getElementById("spoolR").classList.add("running");
+      } else {
+        bgSong.pause();
+        document.getElementById("musicBtn").innerText = "🔇";
+        document.getElementById("spoolL").classList.remove("running");
+        document.getElementById("spoolR").classList.remove("running");
+      }
+    }
+
+    function playOrPauseTape() {
+      toggleMusic();
+    }
+
+    // Screen Transitions
+    function goToScreen(id) {
+      triggerHaptic(30);
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const t = document.getElementById(id);
+      if (t) {
+        t.classList.add("active");
+        if (id === "screen-contract") initSignatureCanvas();
+      }
+    }
+
+    // Canvas Realistic Falling Rose Petals
+    const pCvs = document.getElementById("petalsCanvas");
+    const pCtx = pCvs.getContext("2d");
+    let petals = [];
+
+    function resizePetals() {
+      pCvs.width = window.innerWidth;
+      pCvs.height = window.innerHeight;
+      petals = [];
+      for (let i = 0; i < 35; i++) {
+        petals.push({
+          x: Math.random() * pCvs.width,
+          y: Math.random() * pCvs.height,
+          size: Math.random() * 8 + 6,
+          speedY: Math.random() * 0.9 + 0.5,
+          speedX: Math.random() * 0.6 - 0.3,
+          rotation: Math.random() * 360,
+          rotSpeed: Math.random() * 1.5 - 0.75,
+          color: Math.random() > 0.4 ? "rgba(230, 0, 76, 0.55)" : "rgba(255, 102, 140, 0.45)"
+        });
+      }
+    }
+    window.addEventListener("resize", resizePetals);
+    resizePetals();
+
+    function renderPetals() {
+      pCtx.clearRect(0, 0, pCvs.width, pCvs.height);
+      petals.forEach(p => {
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.rotation += p.rotSpeed;
+
+        if (p.y > pCvs.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * pCvs.width;
+        }
+
+        pCtx.save();
+        pCtx.translate(p.x, p.y);
+        pCtx.rotate((p.rotation * Math.PI) / 180);
+        pCtx.fillStyle = p.color;
+        pCtx.beginPath();
+        pCtx.ellipse(0, 0, p.size, p.size * 1.4, 0, 0, Math.PI * 2);
+        pCtx.fill();
+        pCtx.restore();
+      });
+      requestAnimationFrame(renderPetals);
+    }
+    renderPetals();
+
+    // Screen 1: Rose Portal
+    function openRoseVault() {
+      triggerHaptic([40, 50, 70]);
+      forceAudioUnlock();
+      confetti({ particleCount: 75, spread: 80, origin: { y: 0.55 }, colors: ['#ff0055', '#d4af37', '#ffffff'] });
+      setTimeout(() => {
+        goToScreen("screen-constellation");
+      }, 350);
+    }
+
+    // Screen 2: Constellation Star Map Logic
+    let starProgress = 1;
+    const starHints = [
+      "Now tap Star #2 ✨",
+      "Connect to Star #3 💫",
+      "Almost complete! Tap Star #4 🌟",
+      "Constellation Complete: A Heart Written In The Stars! 💕"
+    ];
+
+    function tapConstellationStar(n) {
+      if (n === starProgress) {
+        triggerHaptic(30);
+        document.getElementById(`star${n}`).classList.add("active");
+        if (n <= 4) {
+          const line = document.getElementById(`line${n}`);
+          line.style.strokeDashoffset = "0";
+        }
+        confetti({ particleCount: 15, spread: 45 });
+        document.getElementById("starHintText").innerText = starHints[n - 1];
+        starProgress++;
+
+        if (starProgress > 4) {
+          triggerHaptic([50, 50, 100]);
+          confetti({ particleCount: 65, spread: 85 });
+          document.getElementById("btnConstNext").style.display = "inline-flex";
+        }
+      }
+    }
+
+    // Screen 4: Wax Letters
+    let sealsBroken = 0;
+    function breakSeal(envelope) {
+      triggerHaptic(35);
+      const note = envelope.querySelector(".envelope-note-content");
+      const seal = envelope.querySelector(".wax-seal");
+
+      if (note.style.display !== "block") {
+        note.style.display = "block";
+        seal.innerText = "💌";
+        envelope.style.background = "rgba(255, 255, 255, 0.12)";
+        confetti({ particleCount: 20, spread: 50 });
+        sealsBroken++;
+        if (sealsBroken >= 3) {
+          document.getElementById("btnEnvelopesNext").style.display = "inline-flex";
+        }
+      }
+    }
+
+    // Screen 5: Impossible Proposal Dodge Engine
+    const noTaunts = [
+      "Arre aise kaise? Socho dobara! 😜",
+      "Nahi maanogi? Pakad ke dikhao! 🏃‍♂️",
+      "Wrong button cutie, YES dabao! ❤️",
+      "Koshish bekar hai, destiny locked hai! 🔐",
+      "Bas YES bol do chup-chaap! 🙈"
+    ];
+    let tauntIdx = 0;
+
+    function dodgeNoButton() {
+      triggerHaptic(20);
+      const btnNo = document.getElementById("btnNoTeleport");
+      const arena = document.getElementById("proposalArena");
+
+      // Random position inside arena boundaries
+      const maxX = arena.clientWidth - btnNo.clientWidth - 10;
+      const maxY = arena.clientHeight - btnNo.clientHeight - 10;
+
+      const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+      btnNo.style.left = `${randomX}px`;
+      btnNo.style.top = `${randomY}px`;
+
+      document.getElementById("noTauntText").innerText = noTaunts[tauntIdx % noTaunts.length];
+      tauntIdx++;
+    }
+
+    function acceptProposal() {
+      triggerHaptic([60, 60, 120]);
+      confetti({ particleCount: 120, spread: 100, origin: { y: 0.5 }, colors: ['#ff0055', '#d4af37', '#ffffff'] });
+      setTimeout(() => {
+        goToScreen("screen-contract");
+      }, 600);
+    }
+
+    // Screen 6: Digital Signature Canvas
+    let sigCanvas, sigCtx, isDrawing = false;
+
+    function initSignatureCanvas() {
+      sigCanvas = document.getElementById("signaturePad");
+      sigCtx = sigCanvas.getContext("2d");
+      sigCanvas.width = sigCanvas.clientWidth;
+      sigCanvas.height = sigCanvas.clientHeight;
+      sigCtx.strokeStyle = "#800020";
+      sigCtx.lineWidth = 2.5;
+      sigCtx.lineCap = "round";
+
+      function getPos(e) {
+        const rect = sigCanvas.getBoundingClientRect();
+        return {
+          x: (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left,
+          y: (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top
+        };
+      }
+
+      function startDraw(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        sigCtx.beginPath();
+        sigCtx.moveTo(pos.x, pos.y);
+      }
+      function moveDraw(e) {
+        if (!isDrawing) return;
+        triggerHaptic(5);
+        const pos = getPos(e);
+        sigCtx.lineTo(pos.x, pos.y);
+        sigCtx.stroke();
+      }
+      function endDraw() { isDrawing = false; }
+
+      sigCanvas.addEventListener("mousedown", startDraw);
+      sigCanvas.addEventListener("mousemove", moveDraw);
+      sigCanvas.addEventListener("mouseup", endDraw);
+      sigCanvas.addEventListener("touchstart", (e) => { e.preventDefault(); startDraw(e); });
+      sigCanvas.addEventListener("touchmove", (e) => { e.preventDefault(); moveDraw(e); });
+      sigCanvas.addEventListener("touchend", endDraw);
+    }
+
+    function clearSignature() {
+      triggerHaptic(25);
+      if (sigCtx && sigCanvas) {
+        sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+      }
+    }
+
+    function lockContractForever() {
+      triggerHaptic([70, 70, 150]);
+      confetti({ particleCount: 150, spread: 120, origin: { y: 0.4 } });
+      setTimeout(() => {
+        goToScreen("screen-final");
+      }, 500);
+    }
+  </script>
+</body>
+</html>
