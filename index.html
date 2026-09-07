@@ -5,17 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>To The One Who Has My Heart... 🌹</title>
 
-  <!-- SECRET URL SECURITY LOCK -->
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const secretKey = urlParams.get('key');
-    // Secret code is: mylove27 (Access link: yoururl/?key=mylove27)
-    if (secretKey !== "mylove27") {
-      document.write("<div style='background:#080004;color:#f7e6c4;height:100vh;display:flex;align-items:center;justify-content:center;font-family:sans-serif;text-align:center;'><h2>404 - Page Locked 🔐</h2></div>");
-      window.stop();
-    }
-  </script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
@@ -170,7 +159,7 @@
       100% { transform: scale(1.1); }
     }
 
-    /* SCREEN 2: CUPID'S GOLDEN ARROW GAME (NEW ULTRA ROMANTIC) */
+    /* SCREEN 2: CUPID'S GOLDEN ARROW GAME */
     .cupid-arena {
       position: relative;
       width: 290px;
@@ -221,7 +210,36 @@
       transform: translateY(-145px) rotate(-45deg) scale(1.2);
     }
 
-    /* SCREEN 3: Vintage Lo-Fi Cassette Tape */
+    /* SCREEN 3: LOVE METER CHEMISTRY TEST (SPECIAL UPGRADE) */
+    .meter-box {
+      width: 290px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(212, 175, 55, 0.35);
+      border-radius: 20px;
+      padding: 20px 16px;
+      margin: 12px auto;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+    .meter-bar-track {
+      width: 100%;
+      height: 22px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      margin: 14px 0 10px;
+      position: relative;
+    }
+    .meter-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff0055, #ffd700);
+      border-radius: 12px;
+      transition: width 1.8s cubic-bezier(0.12, 0.8, 0.2, 1);
+      box-shadow: 0 0 15px #ff0055;
+    }
+
+    /* SCREEN 4: Vintage Lo-Fi Cassette Tape */
     .cassette-box {
       position: relative;
       width: 290px;
@@ -266,7 +284,7 @@
     .spool-gear.running { animation-play-state: running; }
     @keyframes spoolRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* SCREEN 4: Wax-Sealed Envelopes */
+    /* SCREEN 5: Wax-Sealed Envelopes */
     .envelopes-zone {
       display: flex;
       flex-direction: column;
@@ -310,7 +328,7 @@
       font-style: italic;
     }
 
-    /* SCREEN 5: Impossible Proposal Screen */
+    /* SCREEN 6: Impossible Proposal Screen */
     .proposal-arena {
       position: relative;
       width: 310px;
@@ -349,7 +367,7 @@
       z-index: 6;
     }
 
-    /* SCREEN 6: Digital Signature Love Contract */
+    /* SCREEN 7: Digital Signature Love Contract */
     .certificate-card {
       width: 315px;
       background: #fdf5e6;
@@ -439,10 +457,28 @@
       </div>
 
       <p id="cupidStatusText" style="min-height: 24px; color: #ffd1dc; font-size: 12.5px;">Take your shot, my heart is all yours... 🌸</p>
-      <button class="btn-luxury" id="btnCupidNext" style="display:none;" onclick="goToScreen('screen-cassette')">Play Our Tape 📼</button>
+      <button class="btn-luxury" id="btnCupidNext" style="display:none;" onclick="goToScreen('screen-meter')">Check Chemistry 💫</button>
     </div>
 
-    <!-- SCREEN 3: 90s Aesthetic Cassette Player -->
+    <!-- SCREEN 3: LOVE METER CHEMISTRY TEST -->
+    <div class="screen" id="screen-meter">
+      <h1 class="hero-title">Our Chemistry Test 💫</h1>
+      <p class="hero-subtitle">Calculating how perfectly we match...</p>
+
+      <div class="meter-box">
+        <div style="font-size: 38px; margin-bottom: 4px;">♾️❤️</div>
+        <h3 id="meterPercentText" style="font-size: 22px; color: #ffd700;">0%</h3>
+        <div class="meter-bar-track">
+          <div class="meter-bar-fill" id="meterFill"></div>
+        </div>
+        <p id="meterVerdictText" style="font-size: 11.5px; color: #ffd1dc; min-height: 32px; margin-top: 6px;">Tap below to calculate our bond ✨</p>
+      </div>
+
+      <button class="btn-luxury" id="btnRunMeter" onclick="runChemistryMeter()">Test Love ⚡</button>
+      <button class="btn-luxury" id="btnMeterNext" style="display:none;" onclick="goToScreen('screen-cassette')">Play Our Tape 📼</button>
+    </div>
+
+    <!-- SCREEN 4: 90s Aesthetic Cassette Player -->
     <div class="screen" id="screen-cassette">
       <h1 class="hero-title">Side A: Unspoken Words 📼</h1>
       <p class="hero-subtitle">The melodies that always bring your face to mind</p>
@@ -461,7 +497,7 @@
       <button class="btn-luxury" onclick="goToScreen('screen-envelopes')">Secret Wax Letters 💌</button>
     </div>
 
-    <!-- SCREEN 4: Wax-Sealed Letters -->
+    <!-- SCREEN 5: Wax-Sealed Letters -->
     <div class="screen" id="screen-envelopes">
       <h1 class="hero-title">Wax Sealed Secrets 💌</h1>
       <p class="hero-subtitle">Break each seal to uncover what makes you my home</p>
@@ -495,7 +531,7 @@
       <button class="btn-luxury" id="btnEnvelopesNext" style="display:none;" onclick="goToScreen('screen-proposal')">A Question For You 💍</button>
     </div>
 
-    <!-- SCREEN 5: Impossible Valentine Proposal -->
+    <!-- SCREEN 6: Impossible Valentine Proposal -->
     <div class="screen" id="screen-proposal">
       <h1 class="hero-title" style="font-size: 24px;">Will You Be My Valentine? 💍🌹</h1>
       <p class="hero-subtitle">Choose wisely... there is genuinely no other way out ❤️</p>
@@ -508,7 +544,7 @@
       <p id="noTauntText" style="min-height: 22px; font-size: 12px; color: #ffd166;"></p>
     </div>
 
-    <!-- SCREEN 6: Love Contract & Digital Signature -->
+    <!-- SCREEN 7: Love Contract & Digital Signature -->
     <div class="screen" id="screen-contract">
       <h1 class="hero-title">The Forever Covenant 📜</h1>
       <p class="hero-subtitle">Official Valentine's Agreement</p>
@@ -529,7 +565,7 @@
       <button class="btn-luxury" onclick="lockContractForever()">Seal The Promise 🔐</button>
     </div>
 
-    <!-- SCREEN 7: Final Romantic Climax -->
+    <!-- SCREEN 8: Final Romantic Climax -->
     <div class="screen" id="screen-final">
       <div style="font-size: 54px; margin-bottom: 8px;">👑❤️</div>
       <h1 class="hero-title" style="font-size: 24px;">Bound Forever By Heart</h1>
@@ -648,7 +684,7 @@
     }
     renderPetals();
 
-    // Screen 1: Rose Portal
+    // Screen 1: Rose Vault
     function openRoseVault() {
       triggerHaptic([40, 50, 70]);
       forceAudioUnlock();
@@ -658,7 +694,7 @@
       }, 350);
     }
 
-    // Screen 2: Cupid's Golden Arrow Game Logic
+    // Screen 2: Cupid's Arrow
     let arrowShot = false;
     function shootCupidArrow() {
       if (arrowShot) return;
@@ -682,7 +718,37 @@
       }, 450);
     }
 
-    // Screen 4: Wax Letters
+    // Screen 3: Love Meter Chemistry Test
+    let meterDone = false;
+    function runChemistryMeter() {
+      if (meterDone) return;
+      meterDone = true;
+      triggerHaptic([30, 40, 50]);
+
+      document.getElementById("btnRunMeter").style.display = "none";
+      const fill = document.getElementById("meterFill");
+      const percentText = document.getElementById("meterPercentText");
+      const verdict = document.getElementById("meterVerdictText");
+
+      fill.style.width = "100%";
+
+      let count = 0;
+      const counter = setInterval(() => {
+        count += 7;
+        if (count >= 1000) {
+          clearInterval(counter);
+          percentText.innerText = "1000% (Infinite)";
+          verdict.innerText = "Scientific result: Hamara bond is literally written in the stars! ♾️💕";
+          triggerHaptic([50, 50, 100]);
+          confetti({ particleCount: 65, spread: 80 });
+          document.getElementById("btnMeterNext").style.display = "inline-flex";
+        } else {
+          percentText.innerText = count + "%";
+        }
+      }, 12);
+    }
+
+    // Screen 5: Wax Letters
     let sealsBroken = 0;
     function breakSeal(envelope) {
       triggerHaptic(35);
@@ -701,7 +767,7 @@
       }
     }
 
-    // Screen 5: Impossible Proposal Dodge Engine
+    // Screen 6: Impossible Proposal Dodge Engine
     const noTaunts = [
       "Arre aise kaise? Socho dobara! 😜",
       "Nahi maanogi? Pakad ke dikhao! 🏃‍♂️",
@@ -737,7 +803,7 @@
       }, 600);
     }
 
-    // Screen 6: Digital Signature Canvas
+    // Screen 7: Digital Signature Canvas
     let sigCanvas, sigCtx, isDrawing = false;
 
     function initSignatureCanvas() {
